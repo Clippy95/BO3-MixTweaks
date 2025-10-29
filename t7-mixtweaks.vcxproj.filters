@@ -19,6 +19,9 @@
     <Filter Include="include\safetyhook">
       <UniqueIdentifier>{239ff906-423d-42da-8e9a-1823fc8f4b97}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\mini">
+      <UniqueIdentifier>{0d743047-88e6-4946-857b-7594c140d6e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -41,6 +44,12 @@
     </ClInclude>
     <ClInclude Include="structs.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\mini\ini.h">
+      <Filter>include\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IniReader.h">
+      <Filter>include\mini</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

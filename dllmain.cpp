@@ -6,6 +6,9 @@
 #include "psapi.h"
 #include "spoof.h"
 #include "structs.hpp"
+
+#include "IniReader.h"
+
 SafetyHookInline whatever;
 
 DEFINE_FUNC_CDECL(REBASE(0x142148350,0), Com_IsRunningUILevel, bool)
@@ -189,16 +192,19 @@ SafetyHookMid matrix_hack;
 float cg_fovscale_override = 1.f;
 
 float get_cg_fovscale() {
-    if (!cg_fovscale)
-        return cg_fovscale_override;
-    if(cg_fovscale->current.value.value != 1.f)
-    return cg_fovscale->current.value.value;
+    //if (!cg_fovscale)
+    //    return cg_fovscale_override;
+    //if(cg_fovscale->current.value.value != 1.f)
+    //return cg_fovscale->current.value.value;
 
     return cg_fovscale_override;
 
 }
 
 DWORD Start_MixTweaks(LPVOID lpThreadParameter) {
+
+    CIniReader ini;
+    cg_fovscale_override = std::clamp(ini.ReadFloat("FOV", "cg_fovscale", 1.f),0.1f,std::numeric_limits<float>::max());
 
     spoof_t = (void*)REBASE(0x6DB96,0x1027);
     if (is_wstore) {
@@ -244,10 +250,7 @@ DWORD Start_MixTweaks(LPVOID lpThreadParameter) {
             float* dx_dz = (float*)(ctx.rbp + 0x28);
             float* dy_dz = (float*)(ctx.rbp + 0x20);
             float scale = 2.f;
-            scale = 1.55f;
-            if (cg_fovscale) {
-                scale = cg_fovscale->current.value.value;
-            }
+            scale = get_cg_fovscale();
             *fov_x *= scale;
             *dx_dz *= scale;
             *dy_dz *= scale;

@@ -156,7 +156,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="include\IniReader.h" />
     <ClInclude Include="include\MemoryMgr.h" />
+    <ClInclude Include="include\mini\ini.h" />
     <ClInclude Include="include\safetyhook\safetyhook.hpp" />
     <ClInclude Include="include\safetyhook\Zydis.h" />
     <ClInclude Include="pch.h" />
