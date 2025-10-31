@@ -435,8 +435,8 @@ DWORD Start_MixTweaks(LPVOID lpThreadParameter) {
     CIniReader ini;
     cg_fovscale_override = std::clamp(ini.ReadFloat("FOV", "cg_fovscale", 1.f),0.1f,std::numeric_limits<float>::max());
 
-    spoof_t = (void*)REBASE(0x6DB96, 0x1027);
-
+    spoof_t = (void*)REBASE(0x1055, 0x1027);
+    Memory::VP::Patch<uint16_t>(spoof_t, 0x27FF);
 
     if (is_wstore && (false == true)) {
         Add_Dvarst = safetyhook::create_inline(REBASE(0x140866AA0, 0x1423ABE50), &Add_Dvars_Hook);
@@ -455,7 +455,19 @@ DWORD Start_MixTweaks(LPVOID lpThreadParameter) {
     }
     Sleep(5000);
 
+    if (ini.ReadInteger("Misc", "SkipIntro", 1) != 0) 
+    {
+        *(bool*)REBASE(0x1453E4718, 0x149BBCB88) = true;
 
+        static auto skip_intro = safetyhook::create_mid(REBASE(0x14211221F, 0x14221461C), [](SafetyHookContext& ctx) {
+            *(bool*)REBASE(0x1453E4718, 0x149BBCB88) = true;
+            dvar_t* ui_playLogoMovie = *(dvar_t**)REBASE(0x1568EDE00, 0x148DEE2D8);
+            if (ui_playLogoMovie) {
+                ui_playLogoMovie->current.value.enabled = false;
+                ui_playLogoMovie->latched.value.enabled = false;
+            }
+            });
+    }
     is_wstore = Memory::VP::MemEquals(REBASE(0x142F3D078, 0x142F3D078), { 0x73, 0x68, 0x6F, 0x77 });
 
     //is_wstore = false;
